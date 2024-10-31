@@ -38,6 +38,9 @@ public class Countertop : Objects
         }
         if (collision.CompareTag("Player"))
         {
+            if (ObjectStop)
+            {
+                print(ObjectStop);
             if (food.Count <= 0) return;
             if (food["Food"]<= 0) { print("조리대 음식 부족함"); return; }
             if (PlayerManeger.Instance.player.Invenadd("Food")) food["Food"]--;             
