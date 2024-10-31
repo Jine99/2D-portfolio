@@ -3,12 +3,14 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - villain
+  - Character
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - player
   - Water
   - UI
   - 
@@ -41,6 +43,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: New Layer 1
+  - name: player
     uniqueID: 1591397459
+    locked: 0
+  - name: Food
+    uniqueID: 1471445855
     locked: 0
