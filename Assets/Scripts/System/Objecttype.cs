@@ -2,7 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Safe : Objects
+public  enum Objecttype
 {
+    Food,
+    Monmey,
+    Trash,
 
 }
