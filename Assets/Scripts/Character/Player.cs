@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements.Experimental;
 
+//유저
 public class Player : MonoBehaviour
 { 
 
@@ -17,7 +18,7 @@ public class Player : MonoBehaviour
     private void Start()
     {
         //플레이어를 매니저에 넣어줌
-        PlayerManeger.Instance.player = this;
+        GameManager.Instance.player = this;
     }
 
     private void Update()
@@ -28,7 +29,7 @@ public class Player : MonoBehaviour
         Vector2 dir = new Vector2(x, y);
         transform.Translate(dir * Time.deltaTime);
 
-
+        if (Inventory.ContainsValue(0))Inventory.Clear();
     }
     //인벤토리에 추가
     public bool Invenadd(Enum Key)
@@ -81,6 +82,7 @@ public class Player : MonoBehaviour
     {
         if (Inventory.Count <= 0)
         {
+            print("버릴 오브젝트가 없다");
             return;
         }
         if (Inventory.ContainsKey(Objecttype.Food))
@@ -99,7 +101,7 @@ public class Player : MonoBehaviour
         }
         if (Inventory.ContainsKey(Objecttype.Trash))
         {
-            Inventory[Objecttype.Trash] = Inventory[Objecttype.Trash] - 100;
+            Inventory[Objecttype.Trash] = Inventory[Objecttype.Trash] - 10;
             if (Inventory[Objecttype.Trash] <= 0) Inventory.Clear();
             print("쓰레기를 버렸다");
             return;

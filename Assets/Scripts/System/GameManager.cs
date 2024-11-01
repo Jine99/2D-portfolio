@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerManeger : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
-    private static PlayerManeger instance;
-    public static PlayerManeger Instance => instance;
+    private static GameManager instance;
+    public static GameManager Instance => instance;
 
     internal Player player;
+    internal List<Customer> customers=new List<Customer>();
 
     private void Awake()
     {
@@ -18,6 +19,18 @@ public class PlayerManeger : MonoBehaviour
             return;
         }
         DontDestroyOnLoad(gameObject);
+    }
+
+
+    private void Start()
+    {
+        
+    }
+
+
+    public void CutomerRemove()
+    {
+
     }
 
 }

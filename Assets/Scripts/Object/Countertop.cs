@@ -8,14 +8,15 @@ public class Countertop : Objects
 
     private new void Start()
     {
-        base.Start();
         CoroutineSpeed = 4f;//코루틴 스피드 설정
         maxObject = 6;//음식 최대보유량
+        base.Start();
     }
     private void Update()
     {
 
     }
+    //음식 랜더링
     private void foodRenderer()
     {
         if (ObjectList[Objecttype.Food] > 1)
@@ -29,12 +30,12 @@ public class Countertop : Objects
         base.OnTriggerStay2D (collision);
         if (collision.CompareTag("Player"))
         {
-            if (ObjectStop)
+            if (ObjectSituation)
             {
-                print(ObjectStop);
+                print(ObjectSituation);
                 if (ObjectList.Count <= 0) return;
                 if (ObjectList[Objecttype.Food] <= 0) { print("조리대 음식 부족함"); return; }
-                if (PlayerManeger.Instance.player.Invenadd(Objecttype.Food)) ObjectList[Objecttype.Food]--;
+                if (GameManager.Instance.player.Invenadd(Objecttype.Food)) ObjectList[Objecttype.Food]--;
             }
             else
             {
@@ -50,10 +51,10 @@ public class Countertop : Objects
         {
             yield return new WaitForSeconds(CoroutineSpeed);
 
-            if (ObjectStop)
+            if (ObjectSituation)
             {
 
-                print(ObjectStop);
+                print(ObjectSituation);
                 if (!ObjectList.ContainsKey(Objecttype.Food))
                 {
                     print("조리대 최초 음식생성");

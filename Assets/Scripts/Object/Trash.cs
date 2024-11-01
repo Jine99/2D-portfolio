@@ -15,7 +15,7 @@ public class Trash : Objects
         if (Time.time - ObjectDelay < Delay)return;
         if (collision.CompareTag("Player"))
         {
-            PlayerManeger.Instance.player.InvenTrash();
+            GameManager.Instance.player.InvenTrash();
             ObjectDelay = Time.time;
         }
     }

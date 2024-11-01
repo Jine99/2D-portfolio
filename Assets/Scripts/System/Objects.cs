@@ -8,6 +8,8 @@ public class Objects : MonoBehaviour
 {
     protected Dictionary<Enum, int> ObjectList = new Dictionary<Enum, int>();//오브젝트 보관 딕셔너리
 
+
+
     protected float Delay = 1f;//딜레이 기준
     protected float ObjectDelay;//오브젝트 쿨타임
 
@@ -15,7 +17,7 @@ public class Objects : MonoBehaviour
 
     protected float CoroutineSpeed;//오브젝트  코루틴속도
 
-    protected bool ObjectStop = true;//빌런 점유상태 체크
+    public bool ObjectSituation = true;//빌런 점유상태 체크
 
     //상속하는 스타트 코루틴
     protected void Start()
@@ -30,20 +32,23 @@ public class Objects : MonoBehaviour
     //빌런 접촉시 공통 동작수행
     protected virtual void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.CompareTag("villain"))
+        if (collision.CompareTag("Villain"))
         {
             print("빌런 접촉함");
-            ObjectStop = false;
-            print(ObjectStop);
+            ObjectSituation = false;
+            print(ObjectSituation);
         }
     }
     //빌런이 사라질시 공통 동작수행
     protected virtual void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("villain"))
+        if (collision.CompareTag("Villain"))
         {
             print("빌런이 떠남");
-            ObjectStop = true;
+            ObjectSituation = true;
+            print(ObjectSituation);
         }
     }
+
 }
+
