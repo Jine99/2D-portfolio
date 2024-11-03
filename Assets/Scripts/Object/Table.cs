@@ -7,6 +7,7 @@ using UnityEngine.Experimental.GlobalIllumination;
 
 public class Table : Objects
 {
+    //TODO: 음식삭제 구현해야함
     private int DeleteFood = 2;//한번에 삭제할 음식 개수
 
    

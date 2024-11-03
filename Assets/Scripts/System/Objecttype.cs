@@ -5,7 +5,7 @@ using UnityEngine;
 public  enum Objecttype
 {
     Food,
-    Monmey,
+    Money,
     Trash,
 
 }

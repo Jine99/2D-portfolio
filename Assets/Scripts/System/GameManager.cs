@@ -8,7 +8,8 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance => instance;
 
     internal Player player;
-    internal List<Customer> customers=new List<Customer>();
+
+    internal int Gamemoney;//가게 전체재정 현황
 
     private void Awake()
     {

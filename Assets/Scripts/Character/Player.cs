@@ -6,7 +6,7 @@ using UnityEngine.UIElements.Experimental;
 
 //유저
 public class Player : MonoBehaviour
-{ 
+{
 
     internal Dictionary<Enum, int> Inventory = new Dictionary<Enum, int>();//가지고 있는 오브젝트 종류;
     internal bool Inventoryempty = true;//플레이어 인벤토리가 비어있는지 아닌지
@@ -29,7 +29,7 @@ public class Player : MonoBehaviour
         Vector2 dir = new Vector2(x, y);
         transform.Translate(dir * Time.deltaTime);
 
-        if (Inventory.ContainsValue(0))Inventory.Clear();
+        if (Inventory.ContainsValue(0)) Inventory.Clear();
     }
     //인벤토리에 추가
     public bool Invenadd(Enum Key)
@@ -46,6 +46,26 @@ public class Player : MonoBehaviour
         {
             print($"플레이어 {Key}에추가");
             Inventory[Key]++;
+            print($"플레이어 소지량 : {Inventory[Key]}");
+            return true;
+
+        }
+        return false;
+    }
+    public bool Invenadd(Enum Key, int value)
+    {
+        if (Invencheck(Key)) return false;
+        if (!Inventory.ContainsKey(Key))
+        {
+            Inventory.Clear();
+            print($"플레이어 {Key} 생성");
+            Inventory.Add(Key, value);
+            return true;
+        }
+        else if (Inventory.ContainsKey(Key))
+        {
+            print($"플레이어 {Key}에추가");
+            Inventory[Key] += value;
             print($"플레이어 소지량 : {Inventory[Key]}");
             return true;
 
@@ -87,27 +107,48 @@ public class Player : MonoBehaviour
         }
         if (Inventory.ContainsKey(Objecttype.Food))
         {
-            Inventory[Objecttype.Food]=Inventory[Objecttype.Food]-100;
-            if(Inventory[Objecttype.Food]<=0) Inventory.Clear();
+            Inventory[Objecttype.Food] -= 100;
+            if (Inventory[Objecttype.Food] <= 0) Inventory.Clear();
             print("음식을 버렸다");
             return;
         }
-        if (Inventory.ContainsKey(Objecttype.Monmey))
+        if (Inventory.ContainsKey(Objecttype.Money))
         {
-            Inventory[Objecttype.Monmey] = Inventory[Objecttype.Monmey] - 100;
-            if (Inventory[Objecttype.Monmey] <= 0) Inventory.Clear();
+            Inventory[Objecttype.Money] -= 100;
+            if (Inventory[Objecttype.Money] <= 0) Inventory.Clear();
             print("돈을 버렸다");
             return;
         }
         if (Inventory.ContainsKey(Objecttype.Trash))
         {
-            Inventory[Objecttype.Trash] = Inventory[Objecttype.Trash] - 10;
+            Inventory[Objecttype.Trash] -= 10;
             if (Inventory[Objecttype.Trash] <= 0) Inventory.Clear();
             print("쓰레기를 버렸다");
             return;
         }
     }
-    
-    
-    
+
+    public void MoneyDeposit(Enum Key)
+    {
+        if (Inventory.Count == 0) return;
+        if (!Inventory.ContainsKey(Key)) return;
+        if (Inventory.ContainsKey(Objecttype.Money))
+        {
+            if (Inventory[Objecttype.Money] >= 100)
+            {
+                GameManager.Instance.Gamemoney += 100;
+                Inventory[Objecttype.Money] -= 100;
+                if(Inventory[Objecttype.Money] <= 0) Inventory.Clear() ;
+            }
+            else if(Inventory[Objecttype.Money] < 100)
+            {
+                GameManager.Instance.Gamemoney += Inventory[Objecttype.Money];
+                Inventory.Clear();
+            }
+
+        }
+        return;
+    }
+
+
 }
