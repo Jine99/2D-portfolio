@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements.Experimental;
+using UnityEngine.WSA;
 
 //유저
 public class Player : MonoBehaviour
@@ -13,23 +14,76 @@ public class Player : MonoBehaviour
 
     private int InvenSize = 4;//최대 소지가능개수
 
+    private float InputDelay;//키입력 딜레이 시간
+    private float Delay = 0.5f;//키입력 딜레이 기준시간
 
 
     private void Start()
     {
         //플레이어를 매니저에 넣어줌
         GameManager.Instance.player = this;
+
     }
 
     private void Update()
     {
-        float x = Input.GetAxis("Horizontal");
-        float y = Input.GetAxis("Vertical");
-
-        Vector2 dir = new Vector2(x, y);
-        transform.Translate(dir * Time.deltaTime);
+        PlayerMove();
 
         if (Inventory.ContainsValue(0)) Inventory.Clear();
+    }
+
+
+
+    public void PlayerMove()
+    {
+        if (Time.time - InputDelay < Delay) return;
+
+        Vector3 direction = Vector3.zero;
+
+        if (Input.GetKey(KeyCode.W))
+        {
+            direction = Vector3.up;
+        }
+        else if (Input.GetKey(KeyCode.S))
+        {
+            direction = Vector3.down;
+
+        }
+        else if (Input.GetKey(KeyCode.A))
+        {
+            direction = Vector3.left;
+
+        }
+        else if (Input.GetKey(KeyCode.D))
+        {
+            direction =Vector3.right;
+
+        }
+        if (direction != Vector3.zero)
+        {
+            bool move =true;
+            Collider2D[] collision2D = Physics2D.OverlapCircleAll(transform.position+direction,0.35f);
+            foreach(Collider2D collision in collision2D)
+            {
+                if (collision.CompareTag("Object")||collision.CompareTag("Customer")||collision.CompareTag("Villain"))
+                {
+                    move = false;
+                    print("오브젝트 찾음");
+                }
+
+            }
+            if (move)
+            {
+                this.transform.position = Vector3.MoveTowards(this.transform.position, this.transform.position + direction, 1f);
+                InputDelay = Time.time;
+            }
+        }
+        
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position + Vector3.up, 0.35f);
     }
     //인벤토리에 추가
     public bool Invenadd(Enum Key)

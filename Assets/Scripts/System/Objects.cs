@@ -11,7 +11,7 @@ public class Objects : MonoBehaviour
 
 
     protected float Delay = 1f;//딜레이 기준
-    protected float ObjectDelay;//오브젝트 쿨타임
+    protected float ObjectDelay = 0;//오브젝트 쿨타임
 
     protected int maxObject = 6;//오브젝트 최대보유량
 

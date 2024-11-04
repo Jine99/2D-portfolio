@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Villain
   - Customer
+  - Object
+  - Table
   layers:
   - Default
   - TransparentFX
@@ -14,7 +16,7 @@ TagManager:
   - Water
   - UI
   - Villain
-  - 
+  - Object
   - 
   - 
   - 

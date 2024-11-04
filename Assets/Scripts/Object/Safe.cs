@@ -14,20 +14,35 @@ public class Safe : Objects
         Delay = 30f;
         DepositDelay = 1f;
     }
+    private void Update()
+    {
+        FindPlayer();
+        Moneysteal();
+        print(GameManager.Instance.Gamemoney);
+    }
 
 
-    //강화 화면 출력
+    //TODO:강화 화면 출력
     public void FindPlayer()
     {
         if (ObjectSituation)
         {
-            Collider2D player = Physics2D.OverlapBox(transform.position + Vector3.left, Vector3.one, 0);
+            //Collider2D player = Physics2D.OverlapBox(transform.position + Vector3.left, Vector3.one, 0);
 
-            if (player == null) return;
-            if (player.TryGetComponent<Player>(out Player newplayer))
+            //if (player == null) return;
+            //if (player.TryGetComponent<Player>(out Player newplayer))
+            //{
+            //    UpgradeObject();
+            //}
+
+            Collider2D player1 = Physics2D.OverlapBox(transform.position + Vector3.right, Vector3.one, 0);
+
+            if (player1 == null) return;
+            if (player1.TryGetComponent<Player>(out Player newplayer1))
             {
                 UpgradeObject();
             }
+
         }
         else
         {
@@ -39,6 +54,9 @@ public class Safe : Objects
     {
         Gizmos.color = Color.red;
         Gizmos.DrawCube(transform.position + Vector3.left, Vector3.one);
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawCube(transform.position + Vector3.right, Vector3.one);
     }
     //빌런 플레이어 체크
     protected override void OnTriggerStay2D(Collider2D collision)
@@ -46,21 +64,33 @@ public class Safe : Objects
         base.OnTriggerStay2D(collision);
         if (ObjectSituation)
         {
-            if (collision.TryGetComponent<Player>(out Player newplayer) && Time.time - DepositAmount>DepositDelay)
+            if (collision.TryGetComponent<Player>(out Player newplayer) && Time.time - DepositAmount > DepositDelay)
             {
+                print("플레이어 돈 넣는중");
                 newplayer.MoneyDeposit(Objecttype.Money);
-                DepositAmount =Time.time;
+                DepositAmount = Time.time;
             }
         }
-            if (!ObjectSituation)
-            {
-                //TODO:  경고알림 여기 구현해야할듯
-                print("빌런이 돈 훔치는중");
-                if (Time.time - ObjectDelay < Delay) return;
-                GameManager.Instance.Gamemoney = GameManager.Instance.Gamemoney / 2;
-            }
-        
 
+    }
+    private void Moneysteal()
+    {
+        if (!ObjectSituation)
+        {
+            //TODO:  경고알림 여기 구현해야할듯
+            ObjectDelay += 1 * Time.deltaTime;
+            print(ObjectDelay);
+            print("빌런이 돈 훔치는중");
+            if (ObjectDelay < Delay) return;
+            GameManager.Instance.Gamemoney = GameManager.Instance.Gamemoney / 2;
+            print($"빌런이 돈 훔쳐감{GameManager.Instance.Gamemoney}");
+            ObjectDelay = 0;
+
+        }
+        if (ObjectSituation)
+        {
+            ObjectDelay = 0;
+        }
     }
     //TODO:가게 업그레이드 구현
     private void UpgradeObject()
