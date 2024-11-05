@@ -3,17 +3,34 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+
 public class Countertop : Objects
 {
+    private Vector3 myvec3;
+
+    private Vector2[] myvec2 = new Vector2[6];
 
     private new void Start()
     {
         CoroutineSpeed = 4f;//코루틴 스피드 설정
         maxObject = 6;//음식 최대보유량
         base.Start();
+        myvec3 = transform.position;
+        myvec2[0] = new Vector3(myvec3.x - 1, myvec3.y);
+        myvec2[1] = new Vector3(myvec3.x - 1, myvec3.y - 1);
+        myvec2[2] = new Vector3(myvec3.x, myvec3.y - 1);
+        myvec2[3] = new Vector3(myvec3.x + 1, myvec3.y - 1);
+        myvec2[4] = new Vector3(myvec3.x + 2, myvec3.y);
+        myvec2[5] = new Vector3(myvec3.x + 2, myvec3.y - 1);
+        StartCoroutine(VillainManager.Instance.FirstSpawn(myvec2[Random.Range(0,myvec2.Length)]));
+
     }
     private void Update()
     {
+        int a = Random.Range(0, myvec2.Length);
+
+        VillainManager.Instance.villainSpawn(myvec2[a]);
+
 
     }
     //음식 랜더링
@@ -27,7 +44,7 @@ public class Countertop : Objects
     //조리대 음식생성 트리거
     protected override void OnTriggerStay2D(Collider2D collision)
     {
-        base.OnTriggerStay2D (collision);
+        base.OnTriggerStay2D(collision);
         if (collision.CompareTag("Player"))
         {
             if (ObjectSituation)

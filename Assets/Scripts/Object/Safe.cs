@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Safe : Objects
@@ -7,19 +8,23 @@ public class Safe : Objects
     private float DepositDelay;//입금 딜레이 기준시간
     private float DepositAmount;//입금 딜레이 남은시간
 
+    private villain villain;
 
     //TODO: 스타트 바꿔야하는지 체크
     private new void Start()
     {
         Delay = 30f;
         DepositDelay = 1f;
+
     }
     private void Update()
     {
         FindPlayer();
         Moneysteal();
         print(GameManager.Instance.Gamemoney);
+        VillainManager.Instance.theftvillainSpawn(Vector2.down);
     }
+
 
 
     //TODO:강화 화면 출력
@@ -77,13 +82,15 @@ public class Safe : Objects
     {
         if (!ObjectSituation)
         {
+
             //TODO:  경고알림 여기 구현해야할듯
             ObjectDelay += 1 * Time.deltaTime;
-            print(ObjectDelay);
             print("빌런이 돈 훔치는중");
+            print(ObjectDelay);
             if (ObjectDelay < Delay) return;
             GameManager.Instance.Gamemoney = GameManager.Instance.Gamemoney / 2;
             print($"빌런이 돈 훔쳐감{GameManager.Instance.Gamemoney}");
+            VillainManager.Instance.villainList[0].Die();
             ObjectDelay = 0;
 
         }

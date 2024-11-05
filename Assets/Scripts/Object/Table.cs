@@ -23,7 +23,7 @@ public class Table : Objects
     private void Update()
     {
         FindColliderOnPlayer();
-        if(Trash <= 0)
+        if (Trash <= 0)
         {
             eating = true;
         }
@@ -37,7 +37,7 @@ public class Table : Objects
     {
         if (ObjectSituation)
         {
-            Collider2D hit = Physics2D.OverlapBox(transform.position + Vector3.left, Vector2.one*0.8f,0f);
+            Collider2D hit = Physics2D.OverlapBox(transform.position + Vector3.left, Vector2.one * 0.8f, 0f);
             //if (hit == null) return;
             if (hit && hit.TryGetComponent<Player>(out Player player))
             {
@@ -53,15 +53,15 @@ public class Table : Objects
 
                 }
             }
-            Collider2D hitdahit = Physics2D.OverlapBox(transform.position + Vector3.up, Vector2.one*0.8f,0f);
+            Collider2D hitdahit = Physics2D.OverlapBox(transform.position + Vector3.up, Vector2.one * 0.8f, 0f);
             //if(hitdahit == null) return;
             if (hitdahit && hitdahit.TryGetComponent<Customer>(out Customer customer))
             {
-                if (Time.time - ObjectDelay < Delay) return;              
+                if (Time.time - ObjectDelay < Delay) return;
                 print("고객 음식 섭취중");
                 customer.Foodeat();
                 Trash++;
-                ObjectDelay=Time.time;
+                ObjectDelay = Time.time;
             }
         }
         else
@@ -69,15 +69,15 @@ public class Table : Objects
             print("빌런이 점유중");
         }
     }
-    
+
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube(transform.position+Vector3.up,Vector2.one*0.8f);
+        Gizmos.DrawWireCube(transform.position + Vector3.up, Vector2.one * 0.8f);
 
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(transform.position + Vector3.left, Vector2.one*0.8f);
+        Gizmos.DrawWireCube(transform.position + Vector3.left, Vector2.one * 0.8f);
     }
     protected override void OnTriggerStay2D(Collider2D collision)
     {

@@ -7,12 +7,12 @@ public class Trash : Objects
 
     private new void Start()
     {
-        
+
     }
 
     private new void OnTriggerStay2D(Collider2D collision)
     {
-        if (Time.time - ObjectDelay < Delay)return;
+        if (Time.time - ObjectDelay < Delay) return;
         if (collision.CompareTag("Player"))
         {
             GameManager.Instance.player.InvenTrash();

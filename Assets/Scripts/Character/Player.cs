@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     internal bool Inventoryempty = true;//플레이어 인벤토리가 비어있는지 아닌지
 
     private int InvenSize = 4;//최대 소지가능개수
+    private int walletSize = 40;//지갑 사이즈(안정해줘서 임의로 정함)
 
     private float InputDelay;//키입력 딜레이 시간
     private float Delay = 0.5f;//키입력 딜레이 기준시간
@@ -56,16 +57,16 @@ public class Player : MonoBehaviour
         }
         else if (Input.GetKey(KeyCode.D))
         {
-            direction =Vector3.right;
+            direction = Vector3.right;
 
         }
         if (direction != Vector3.zero)
         {
-            bool move =true;
-            Collider2D[] collision2D = Physics2D.OverlapCircleAll(transform.position+direction,0.35f);
-            foreach(Collider2D collision in collision2D)
+            bool move = true;
+            Collider2D[] collision2D = Physics2D.OverlapCircleAll(transform.position + direction, 0.35f);
+            foreach (Collider2D collision in collision2D)
             {
-                if (collision.CompareTag("Object")||collision.CompareTag("Customer")||collision.CompareTag("Villain"))
+                if (collision.CompareTag("Object") || collision.CompareTag("Customer") || collision.CompareTag("Villain"))
                 {
                     move = false;
                     print("오브젝트 찾음");
@@ -78,7 +79,7 @@ public class Player : MonoBehaviour
                 InputDelay = Time.time;
             }
         }
-        
+
     }
     private void OnDrawGizmos()
     {
@@ -126,7 +127,7 @@ public class Player : MonoBehaviour
         }
         return false;
     }
-    //인벤토리의 상태 체크
+    //인벤토리 꽉찼는지 체크
     public bool Invencheck(Enum Key)
     {
         if (Inventory.Count == 0)
@@ -135,6 +136,18 @@ public class Player : MonoBehaviour
         }
         if (Inventory.ContainsKey(Key))
         {
+            if (Inventory.ContainsKey(Objecttype.Money))
+            {
+                if (Inventory[Key]< walletSize)
+                {
+                    return false;
+                }
+                else
+                {
+                    print("지갑 가득참");
+                    return true;
+                }
+            }
             if (Inventory[Key] < InvenSize)
             {
                 return false;
@@ -192,9 +205,9 @@ public class Player : MonoBehaviour
             {
                 GameManager.Instance.Gamemoney += 100;
                 Inventory[Objecttype.Money] -= 100;
-                if(Inventory[Objecttype.Money] <= 0) Inventory.Clear() ;
+                if (Inventory[Objecttype.Money] <= 0) Inventory.Clear();
             }
-            else if(Inventory[Objecttype.Money] < 100)
+            else if (Inventory[Objecttype.Money] < 100)
             {
                 GameManager.Instance.Gamemoney += Inventory[Objecttype.Money];
                 Inventory.Clear();
