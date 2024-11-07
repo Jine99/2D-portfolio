@@ -17,14 +17,21 @@ public class Customer : MonoBehaviour
 
     private bool move = true;//플레이어 움직임 가능여부
 
+    public GameObject[] Foods;//플레이어 음식 랜더링
+    private bool FoodRendererswitch = true;//랜더 스위치
+
     private Vector3 Vec;
 
     private void Start()
     {
-
+        foreach(GameObject Food in Foods)
+        {
+            Food.SetActive(false);
+        }
     }
     private void Update()
     {
+        FoodRender();
         FindTable();
         if (CustomerFood == MaxFood)
         {
@@ -38,7 +45,32 @@ public class Customer : MonoBehaviour
             }
             Customermove();
         }
+
     }
+    //음식 랜더링
+    private void FoodRender()
+    {
+        if (CustomerFood > 0)
+        {
+            if (FoodRendererswitch)
+            {
+                int select = Random.Range(0, Foods.Length);
+                Foods[select].SetActive(true);
+                FoodRendererswitch = false;
+            }
+            return;
+        }
+        else
+        {
+            foreach (GameObject Food in Foods)
+            {
+                Food.SetActive(false);
+            }
+            FoodRendererswitch = true;
+        }
+
+    }
+
 
     public void CustomerFoodSell()
     {
@@ -52,8 +84,9 @@ public class Customer : MonoBehaviour
         if (CustomerFood <= 0)
         {
             Table.TableReserved = true;
-            VillainManager.Instance.sleepvillainSpawn(transform.position);
-            Destroy(gameObject);
+
+            VillainManager.Instance.sleepvillainSpawn(transform.position,this);
+            
         }
     }
     public void Customermove()
@@ -150,10 +183,5 @@ public class Customer : MonoBehaviour
 
 
     }
-    private void OnDrawGizmos()
-    {
-        if (Vec == null) return;
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawSphere(new Vector3(Vec.x, Vec.y), 0.35f);
-    }
+
 }

@@ -14,11 +14,17 @@ public class Table : Objects
 
     internal int Trash;//쓰레기 개수
 
+    public GameObject[] garbage;//쓰레기 랜더링
 
 
     private new void Start()
     {
         Delay = 0.5f;//음식 삭제 딜레이
+        foreach (GameObject obj in garbage)
+        {
+            obj.SetActive(false);
+        }
+
     }
     private void Update()
     {
@@ -31,6 +37,39 @@ public class Table : Objects
         {
             eating = false;
         }
+        Rendergarbage();
+    }
+    private void Rendergarbage()
+    {
+        foreach(GameObject obj in garbage)
+        {
+            obj.SetActive(false );
+        }
+        if (Trash == 1)
+        {
+            for (int i = 0; i < 1; i++)
+            {
+                garbage[i].SetActive(true);
+            }
+        }
+        if (Trash == 2)
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                garbage[i].SetActive(true);
+            }
+        }
+        if (Trash >= 3)
+        {
+            for (int i = 0; i < garbage.Length; i++)
+            {
+                garbage[i].SetActive(true);
+            }
+        }
+        else if (Trash <= 0)
+        {
+            return;
+        }
 
     }
     private void FindColliderOnPlayer()
@@ -41,9 +80,8 @@ public class Table : Objects
             //if (hit == null) return;
             if (hit && hit.TryGetComponent<Player>(out Player player))
             {
-                if (Trash > 0)
+                if (Trash > 0&& GameManager.Instance.player.Invenadd(Objecttype.Trash))
                 {
-                    GameManager.Instance.player.Invenadd(Objecttype.Trash);
                     Trash--;
                     print("플레이어 쓰레기 받음");
                 }
@@ -53,15 +91,18 @@ public class Table : Objects
 
                 }
             }
-            Collider2D hitdahit = Physics2D.OverlapBox(transform.position + Vector3.up, Vector2.one * 0.8f, 0f);
-            //if(hitdahit == null) return;
-            if (hitdahit && hitdahit.TryGetComponent<Customer>(out Customer customer))
+            Collider2D[] hitdahit = Physics2D.OverlapBoxAll(transform.position + Vector3.up, Vector2.one * 0.8f, 0f);
+            if(hitdahit == null) return;
+            foreach (Collider2D collider in hitdahit)
             {
-                if (Time.time - ObjectDelay < Delay) return;
-                print("고객 음식 섭취중");
-                customer.Foodeat();
-                Trash++;
-                ObjectDelay = Time.time;
+                if (collider.TryGetComponent<Customer>(out Customer customer))
+                {
+                    if (Time.time - ObjectDelay < Delay) return;
+                    print("고객 음식 섭취중");
+                    customer.Foodeat();
+                    Trash++;
+                    ObjectDelay = Time.time;
+                }
             }
         }
         else

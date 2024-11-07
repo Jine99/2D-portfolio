@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -9,7 +10,11 @@ public class GameManager : MonoBehaviour
 
     internal Player player;
 
-    internal int Gamemoney;//가게 전체재정 현황
+    public TextMeshProUGUI MoneyText;//가지고있는 돈 텍스트
+
+    internal int Gamemoney = 0;//가게 전체재정 현황
+
+
 
     private void Awake()
     {
@@ -25,13 +30,25 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-
+        MoneyText.text = $"$ {Gamemoney}";
     }
 
-
-    public void CutomerRemove()
+    public void Deposit(int Money)
     {
+        Gamemoney += Money;
+        MoneyText.text = $"$ {Gamemoney} ";
 
+    }
+    public bool withdrawal(int Money)
+    {
+        if (Gamemoney > Money)
+        {
+            Gamemoney -= Money;
+            MoneyText.text = $"$ {Gamemoney}";
+            return true;
+        }
+        MoneyText.text = $"$ {Gamemoney} ";
+        return false;
     }
 
 }

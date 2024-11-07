@@ -8,6 +8,7 @@ public class Objects : MonoBehaviour
 {
     protected Dictionary<Enum, int> ObjectList = new Dictionary<Enum, int>();//오브젝트 보관 딕셔너리
 
+    protected villain touchVillain;//터치하고있는 빌런 트래킹
 
 
     protected float Delay = 1f;//딜레이 기준
@@ -32,8 +33,9 @@ public class Objects : MonoBehaviour
     //빌런 접촉시 공통 동작수행
     protected virtual void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.CompareTag("Villain"))
+        if (collision.TryGetComponent<villain>(out villain villain))
         {
+            touchVillain = villain;
             print("빌런 접촉함");
             ObjectSituation = false;
             print(ObjectSituation);

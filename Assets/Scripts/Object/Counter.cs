@@ -19,6 +19,7 @@ public class Counter : Objects
 
     protected bool Customerbool = true;//손님 소환 가능여부
 
+    public GameObject Foods;//랜더링할 음식
 
 
     private new void Start()
@@ -26,7 +27,8 @@ public class Counter : Objects
         Delay = 0.5f;//부모 딜레이 변수 재정의(판매속도 업그레이드 가능)
         ObjectList.Add(Objecttype.Money, 0);
         ObjectList.Add(Objecttype.Food, 0);
-        StartCoroutine(VillainManager.Instance.FirstSpawn(Vector2.down));
+        StartCoroutine(VillainManager.Instance.FirstSpawn(transform.position + Vector3.down));
+        Foods.SetActive(false);
     }
     private void Update()
     {
@@ -34,9 +36,20 @@ public class Counter : Objects
         RefillFood();
         spawnmoney();
         RandomCustomer();
-        VillainManager.Instance.villainSpawn(Vector2.down);
+        foodRenderer();
+        VillainManager.Instance.villainSpawn(transform.position + Vector3.down);
     }
-
+    private void foodRenderer()
+    {
+        if (ObjectList[Objecttype.Food] > 0)
+        {
+            Foods.SetActive(true);
+        }
+        else
+        {
+            Foods.SetActive(false);
+        }
+    }
     private void RefillFood()
     {
         if (ObjectSituation)
@@ -165,7 +178,7 @@ public class Counter : Objects
     {
         if (Customerbool && ObjectSituation)
         {
-            CustomersDelay += 1f * Time.deltaTime;
+            CustomersDelay += Time.deltaTime;
             if (CustomersDelay < CustomerspawnDelay) return;
             float Ran = Random.Range(1, 100f);
             if (Ran <= StageManger.Instance.CistomerChance)

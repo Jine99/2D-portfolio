@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class StageManger : MonoBehaviour
@@ -13,6 +14,8 @@ public class StageManger : MonoBehaviour
     private float[] CustomerSpwan = { 100f, 100f, 90f, 90, 90f, 80f, 80f, 80f, 60f, 60f, 40f, 40f, 20f };//스테이지별 확률
 
     public float CistomerChance;//현재 스테이지 손님 유형 스폰확률
+
+    public TextMeshProUGUI StageLevel;//표시할 스테이지 레벨 텍스트
 
     private void Awake()
     {
@@ -29,6 +32,7 @@ public class StageManger : MonoBehaviour
     void Start()
     {
         CistomerChance = CustomerSpwan[GameLevel - 1];
+        StageLevel.text = $"{GameLevel}"; 
     }
 
     public void StageLevelUp()
@@ -37,7 +41,9 @@ public class StageManger : MonoBehaviour
         if (GameLevel > MaxGameLevel)
         {
             GameLevel = MaxGameLevel;
+
         }
+        StageLevel.text = $"{GameLevel}";
         CistomerChance = CustomerSpwan[GameLevel - 1];
     }
 }

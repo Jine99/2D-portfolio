@@ -9,6 +9,7 @@ public class Safe : Objects
     private float DepositAmount;//입금 딜레이 남은시간
 
     private villain villain;
+    bool playerStay = true;
 
     //TODO: 스타트 바꿔야하는지 체크
     private new void Start()
@@ -22,7 +23,7 @@ public class Safe : Objects
         FindPlayer();
         Moneysteal();
         print(GameManager.Instance.Gamemoney);
-        VillainManager.Instance.theftvillainSpawn(Vector2.down);
+        VillainManager.Instance.theftvillainSpawn(transform.position + Vector3.down);
     }
 
 
@@ -32,6 +33,8 @@ public class Safe : Objects
     {
         if (ObjectSituation)
         {
+            //이거 이렇게 구현하면 접근못함
+
             //Collider2D player = Physics2D.OverlapBox(transform.position + Vector3.left, Vector3.one, 0);
 
             //if (player == null) return;
@@ -40,12 +43,17 @@ public class Safe : Objects
             //    UpgradeObject();
             //}
 
-            Collider2D player1 = Physics2D.OverlapBox(transform.position + Vector3.right, Vector3.one, 0);
+            Collider2D player1 = Physics2D.OverlapBox(transform.position + Vector3.right, Vector3.one*0.7f, 0);
 
-            if (player1 == null) return;
-            if (player1.TryGetComponent<Player>(out Player newplayer1))
+            if (playerStay&&player1&&player1.TryGetComponent<Player>(out Player newplayer1))
             {
+                playerStay = false;
                 UpgradeObject();
+                
+            }
+            else if(player1 == null)
+            {
+                playerStay = true;
             }
 
         }
@@ -81,16 +89,15 @@ public class Safe : Objects
     private void Moneysteal()
     {
         if (!ObjectSituation)
-        {
-
+        {           
             //TODO:  경고알림 여기 구현해야할듯
             ObjectDelay += 1 * Time.deltaTime;
             print("빌런이 돈 훔치는중");
             print(ObjectDelay);
             if (ObjectDelay < Delay) return;
-            GameManager.Instance.Gamemoney = GameManager.Instance.Gamemoney / 2;
+            GameManager.Instance.withdrawal(GameManager.Instance.Gamemoney / 2);
             print($"빌런이 돈 훔쳐감{GameManager.Instance.Gamemoney}");
-            VillainManager.Instance.villainList[0].Die();
+            VillainManager.Instance.Die(touchVillain);
             ObjectDelay = 0;
 
         }

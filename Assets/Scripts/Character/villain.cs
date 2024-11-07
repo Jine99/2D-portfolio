@@ -15,7 +15,7 @@ public class villain : MonoBehaviour
         //빌런 생성직후 매니저에게 넣어줌
         VillainManager.Instance.DestroyVillain(this);
 
-        VillainManager.Instance.villainList.Add(this);
+
         //절도 빌런이면 빌런 체크시간 1.5초
         if (theftVillain)
         {
@@ -46,7 +46,8 @@ public class villain : MonoBehaviour
                 print(Delay);
                 if (Delay > VillainDelay)
                 {
-                    Die();
+                    //Die();
+                    VillainManager.Instance.Die(this);
                 }
             }
             if (player1 == null)
@@ -57,14 +58,14 @@ public class villain : MonoBehaviour
 
     }
 
-    public void Die()
-    {
-        VillainManager.Instance.villainList.Remove(this);
-        if (!VillainManager.Instance.villainswitch) VillainManager.Instance.villainswitch = true;
-        VillainManager.Instance.Delay1 = 0;
-        VillainManager.Instance.Delay2 = 0;
-        Destroy(gameObject);
-    }
+    //public void Die()
+    //{
+    //    VillainManager.Instance.villainList.Remove(this);
+    //    if (!VillainManager.Instance.villainswitch) VillainManager.Instance.villainswitch = true;
+    //    VillainManager.Instance.Delay1 = 0;
+    //    VillainManager.Instance.Delay2 = 0;
+    //    Destroy(gameObject);
+    //}
 
 
     private void OnDrawGizmos()

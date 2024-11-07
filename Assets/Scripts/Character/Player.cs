@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UIElements.Experimental;
 using UnityEngine.WSA;
@@ -18,11 +19,17 @@ public class Player : MonoBehaviour
     private float InputDelay;//키입력 딜레이 시간
     private float Delay = 0.5f;//키입력 딜레이 기준시간
 
+    //보여줄 오브젝트 랜더링
+    public GameObject Trash;
+    public GameObject Money;
+    public GameObject Food;
 
     private void Start()
     {
         //플레이어를 매니저에 넣어줌
         GameManager.Instance.player = this;
+
+
 
     }
 
@@ -31,14 +38,40 @@ public class Player : MonoBehaviour
         PlayerMove();
 
         if (Inventory.ContainsValue(0)) Inventory.Clear();
+        ObjectRender();
     }
 
 
+    private void ObjectRender()
+    {
+        Trash.SetActive(false);
+        Money.SetActive(false);
+        Food.SetActive(false);
+        if (Inventory.Count <= 0) return;
+        if (Inventory.ContainsKey(Objecttype.Trash))
+        {
+            Trash.SetActive(true);
+        }
+        else if (Inventory.ContainsKey(Objecttype.Money))
+        {
+            Money.SetActive(true);
+        }
+        else if (Inventory.ContainsKey(Objecttype.Food))
+        {
+            Food.SetActive(true);
+        }
+        else
+        {
+            return;
+        }
+
+
+    }
 
     public void PlayerMove()
     {
         if (Time.time - InputDelay < Delay) return;
-
+        if(Time.timeScale == 0f ) return;
         Vector3 direction = Vector3.zero;
 
         if (Input.GetKey(KeyCode.W))
@@ -203,13 +236,13 @@ public class Player : MonoBehaviour
         {
             if (Inventory[Objecttype.Money] >= 100)
             {
-                GameManager.Instance.Gamemoney += 100;
+                GameManager.Instance.Deposit(100);
                 Inventory[Objecttype.Money] -= 100;
                 if (Inventory[Objecttype.Money] <= 0) Inventory.Clear();
             }
             else if (Inventory[Objecttype.Money] < 100)
             {
-                GameManager.Instance.Gamemoney += Inventory[Objecttype.Money];
+                GameManager.Instance.Deposit(Inventory[Objecttype.Money]);
                 Inventory.Clear();
             }
 
