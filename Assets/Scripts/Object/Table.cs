@@ -16,14 +16,16 @@ public class Table : Objects
 
     public GameObject[] garbage;//쓰레기 랜더링
 
+    private int RemoveFood = 2;//초당 쓰레기 삭제속도
 
     private new void Start()
     {
-        Delay = 0.5f;//음식 삭제 딜레이
+        Delay = 1f/ RemoveFood;//음식 삭제 딜레이
         foreach (GameObject obj in garbage)
         {
             obj.SetActive(false);
         }
+        base.Start();
 
     }
     private void Update()
@@ -146,4 +148,10 @@ public class Table : Objects
         return false;
     }
 
+
+    public void UpgradeTable(int speed)
+    {
+        RemoveFood += speed;
+        Delay = 1f / RemoveFood;
+    }
 }

@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Safe : Objects
@@ -16,14 +15,29 @@ public class Safe : Objects
     {
         Delay = 30f;
         DepositDelay = 1f;
+        base.Start();
 
     }
     private void Update()
     {
         FindPlayer();
+        FinaPlayer2();
         Moneysteal();
         print(GameManager.Instance.Gamemoney);
         VillainManager.Instance.theftvillainSpawn(transform.position + Vector3.down);
+    }
+    private void FinaPlayer2() 
+    {
+        Collider2D Player = Physics2D.OverlapBox(transform.position + Vector3.down, Vector2.one * 0.7f, 0);
+        if (ObjectSituation && Time.time - DepositAmount > DepositDelay)
+        {
+            if (Player.TryGetComponent<Player>(out Player newplayer))
+            {
+                print("플레이어 돈 넣는중");
+                newplayer.MoneyDeposit(Objecttype.Money);
+                DepositAmount = Time.time;
+            }
+        }
     }
 
 
@@ -45,13 +59,16 @@ public class Safe : Objects
 
             Collider2D player1 = Physics2D.OverlapBox(transform.position + Vector3.right, Vector3.one*0.7f, 0);
 
-            if (playerStay&&player1&&player1.TryGetComponent<Player>(out Player newplayer1))
+            if (player1&&player1.TryGetComponent<Player>(out Player newplayer1))
             {
-                playerStay = false;
-                UpgradeObject();
+                if (playerStay)
+                {
+                  playerStay = false;
+                  UpgradeObject();
+                }
                 
             }
-            else if(player1 == null)
+            else
             {
                 playerStay = true;
             }
@@ -72,20 +89,20 @@ public class Safe : Objects
         Gizmos.DrawCube(transform.position + Vector3.right, Vector3.one);
     }
     //빌런 플레이어 체크
-    protected override void OnTriggerStay2D(Collider2D collision)
-    {
-        base.OnTriggerStay2D(collision);
-        if (ObjectSituation)
-        {
-            if (collision.TryGetComponent<Player>(out Player newplayer) && Time.time - DepositAmount > DepositDelay)
-            {
-                print("플레이어 돈 넣는중");
-                newplayer.MoneyDeposit(Objecttype.Money);
-                DepositAmount = Time.time;
-            }
-        }
+    //protected override void OnTriggerStay2D(Collider2D collision)
+    //{
+    //    base.OnTriggerStay2D(collision);
+    //    if (ObjectSituation && Time.time - DepositAmount > DepositDelay)
+    //    {
+    //        if (collision.TryGetComponent<Player>(out Player newplayer))
+    //        {
+    //            print("플레이어 돈 넣는중");
+    //            newplayer.MoneyDeposit(Objecttype.Money);
+    //            DepositAmount = Time.time;
+    //        }
+    //    }
 
-    }
+    //}
     private void Moneysteal()
     {
         if (!ObjectSituation)
@@ -110,5 +127,6 @@ public class Safe : Objects
     private void UpgradeObject()
     {
         print("업그레이드 호출");
+        UIManager.Instance.OnUpgradePanel();
     }
 }

@@ -7,7 +7,7 @@ public class Trash : Objects
 
     private new void Start()
     {
-
+        base.Start();
     }
 
     private new void OnTriggerStay2D(Collider2D collision)

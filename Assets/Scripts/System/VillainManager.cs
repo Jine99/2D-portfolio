@@ -124,7 +124,7 @@ public class VillainManager : MonoBehaviour
         }
         float probability = 20f;//빌런 출현 확률
         float villainprobability = Random.Range(0f, 100f);
-        if (villainprobability > probability)
+        if (villainprobability < probability)
         {
             Instantiate(villain, position, Quaternion.identity);
             villainWarning.SetActive(true);
@@ -138,7 +138,7 @@ public class VillainManager : MonoBehaviour
 
     public IEnumerator FirstSpawn(Vector2 vector2)
     {
-        yield return new WaitForSeconds(Random.Range(3f,4f));
+        yield return new WaitForSeconds(Random.Range(60f,60.9f));
         print("첫빌런 소환시도");
         if (!Villaincheck) { print("첫 빌런 소환 실패1"); yield break; }
         if (villainList.Count >= 1) { print("첫 빌런 소환 실패2"); yield break; }

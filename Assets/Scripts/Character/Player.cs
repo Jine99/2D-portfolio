@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UIElements.Experimental;
-using UnityEngine.WSA;
+
 
 //유저
 public class Player : MonoBehaviour
@@ -14,10 +14,13 @@ public class Player : MonoBehaviour
     internal bool Inventoryempty = true;//플레이어 인벤토리가 비어있는지 아닌지
 
     private int InvenSize = 4;//최대 소지가능개수
-    private int walletSize = 40;//지갑 사이즈(안정해줘서 임의로 정함)
+    private int walletSize;//지갑 사이즈(안정해줘서 임의로 정함)
 
     private float InputDelay;//키입력 딜레이 시간
-    private float Delay = 0.5f;//키입력 딜레이 기준시간
+    private int Moveblock = 2;//초당 움직일 블럭 개수
+    private float MoveDelay;//키입력 딜레이 기준시간
+
+    internal float VillaindEvict = 1f;//절도빌런 퇴치속도 배율 1이면 그대로
 
     //보여줄 오브젝트 랜더링
     public GameObject Trash;
@@ -26,11 +29,11 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
+
+        walletSize = InvenSize * 10;//오브젝트간 소지량 차이가있어 임으로 맞춰줌
+        MoveDelay = 1f/Moveblock;//1초에 몇블럭을 움직일지
         //플레이어를 매니저에 넣어줌
         GameManager.Instance.player = this;
-
-
-
     }
 
     private void Update()
@@ -41,7 +44,7 @@ public class Player : MonoBehaviour
         ObjectRender();
     }
 
-
+    //소지하고있는 오브젝트 타입따라서 랜더링
     private void ObjectRender()
     {
         Trash.SetActive(false);
@@ -67,10 +70,10 @@ public class Player : MonoBehaviour
 
 
     }
-
+    //플레이어 움직임 매커니즘 딜레이마다 1칸씩 이동
     public void PlayerMove()
     {
-        if (Time.time - InputDelay < Delay) return;
+        if (Time.time - InputDelay < MoveDelay) return;
         if(Time.timeScale == 0f ) return;
         Vector3 direction = Vector3.zero;
 
@@ -140,6 +143,7 @@ public class Player : MonoBehaviour
         }
         return false;
     }
+    //인벤토리추가 오버로딩
     public bool Invenadd(Enum Key, int value)
     {
         if (Invencheck(Key)) return false;
@@ -227,7 +231,7 @@ public class Player : MonoBehaviour
             return;
         }
     }
-
+    //금고에 플레이어가 가진 돈을 넣기
     public void MoneyDeposit(Enum Key)
     {
         if (Inventory.Count == 0) return;
@@ -249,6 +253,31 @@ public class Player : MonoBehaviour
         }
         return;
     }
-
+    /// <summary>
+    /// 인벤토리가 몇칸더 증가하고싶은지 업그레이드 반영(기존값 +)
+    /// </summary>
+    /// <param name="Upsize"></param>
+    public void InvenSizeUp(int Upsize)
+    {
+        InvenSize = InvenSize + Upsize;
+        walletSize = InvenSize * 10;
+    }
+    /// <summary>
+    /// 초당 몇블럭을 더 움직이고싶은지 업그레이드 반영(기존값 +)
+    /// </summary>
+    /// <param name="block"></param>
+    public void MovespeedUp(int block)
+    {
+        Moveblock = Moveblock + block;
+        MoveDelay = 1f / Moveblock;
+    }
+    /// <summary>
+    ///    절도빌런 퇴치 배속 scale배 만큼 빨라짐 ex) scale = 3  3배 빨라진 0.3f 적용
+    /// </summary>
+    /// <param name="scale"></param>
+    public void VillaindEvictUp(int scale)
+    {
+        VillaindEvict = 1f / scale;
+    }
 
 }

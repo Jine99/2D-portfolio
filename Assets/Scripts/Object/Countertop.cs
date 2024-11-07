@@ -23,7 +23,7 @@ public class Countertop : Objects
         {
             obj.SetActive(false);
         }
-        base.Start();
+        StartCoroutine(ObjectCoroutine());
         myvec3 = transform.position;
         myvec2[0] = new Vector3(myvec3.x - 1, myvec3.y);
         myvec2[1] = new Vector3(myvec3.x - 1, myvec3.y - 1);
@@ -31,7 +31,8 @@ public class Countertop : Objects
         myvec2[3] = new Vector3(myvec3.x + 1, myvec3.y - 1);
         myvec2[4] = new Vector3(myvec3.x + 2, myvec3.y);
         myvec2[5] = new Vector3(myvec3.x + 2, myvec3.y - 1);
-       // StartCoroutine(VillainManager.Instance.FirstSpawn(myvec2[Random.Range(0,myvec2.Length)]));
+        // StartCoroutine(VillainManager.Instance.FirstSpawn(myvec2[Random.Range(0,myvec2.Length)]));
+        base.Start();
        
     }
     private void Update()
@@ -117,7 +118,18 @@ public class Countertop : Objects
 
     }
 
-    //TODO:조리대 강화 만들어야함
+    //조리대 강화 
+    /// <summary>
+    /// 1개 만드는데 걸리는 시간(대체),최대 소지량 증가(기존값 +)
+    /// </summary>
+    /// <param name="CoroutineSpeed"></param>
+    /// <param name="maxFood"></param>
+    public void UpgradeCountertop(float Speed,int maxFood)
+    {
+        CoroutineSpeed = Speed;
+        maxObject += maxFood;
+    }
+
 }
 
 

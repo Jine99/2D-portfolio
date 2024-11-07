@@ -15,20 +15,24 @@ public class Counter : Objects
     private float CustomerspawnDelay = 1f;//손님 스폰 쿨타임
     private float CustomersDelay = 0f;//손님 스폰 기준쿨타임
 
-    private bool CounterUpgrarade = false;//계산대 업그레이드 유무
+    private bool ifUpgrarade = false;//계산대 업그레이드 유무
 
     protected bool Customerbool = true;//손님 소환 가능여부
+
+    public int saleDelay = 2;//초당 판매개수
 
     public GameObject Foods;//랜더링할 음식
 
 
+
     private new void Start()
     {
-        Delay = 0.5f;//부모 딜레이 변수 재정의(판매속도 업그레이드 가능)
+        Delay = 1f/saleDelay;//부모 딜레이 변수 재정의(판매속도 업그레이드 가능)
         ObjectList.Add(Objecttype.Money, 0);
         ObjectList.Add(Objecttype.Food, 0);
         StartCoroutine(VillainManager.Instance.FirstSpawn(transform.position + Vector3.down));
         Foods.SetActive(false);
+        base.Start();
     }
     private void Update()
     {
@@ -105,7 +109,7 @@ public class Counter : Objects
     {
         Collider2D FindCustomer1 = Physics2D.OverlapBox(transform.position + new Vector3(0.5f, 1f, 0f), new Vector2(1.8f, 0.8f), 0f);
         if (FindCustomer1 == null) return;
-        if (FindCustomer1.TryGetComponent<Player>(out Player player) || CounterUpgrarade)
+        if (FindCustomer1.TryGetComponent<Player>(out Player player) || ifUpgrarade)
         {
             print("플레이어 거래하러 도착");
             while (customer.MaxFood > customer.CustomerFood && ObjectList[Objecttype.Food] > 0)
@@ -223,4 +227,18 @@ public class Counter : Objects
 
 
     // TODO: 강화 구현해야함. 돈 오브젝트 생성방식 보완 필요
+    /// <summary>
+    /// 초당 판매할 개수 (대체)
+    /// </summary>
+    /// <param name="slaespeed"></param>
+    public void UpgradeCounter(int slaespeed)
+    {
+        saleDelay = slaespeed;
+        Delay = 1f / saleDelay;
+        if (!ifUpgrarade)
+        {
+            ifUpgrarade = true;
+        }
+
+    }
 }

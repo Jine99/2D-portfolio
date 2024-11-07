@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -23,7 +24,7 @@ public class Objects : MonoBehaviour
     //상속하는 스타트 코루틴
     protected void Start()
     {
-        StartCoroutine(ObjectCoroutine());
+        ObjectsManager.Instance.Objects.Add(this);
     }
     //자식에서 코루틴 재정의
     protected virtual IEnumerator ObjectCoroutine()

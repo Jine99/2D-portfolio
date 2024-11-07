@@ -39,9 +39,14 @@ public class GameManager : MonoBehaviour
         MoneyText.text = $"$ {Gamemoney} ";
 
     }
+    /// <summary>
+    /// 계산에 필요한 값입력시 계산및 bool값 return
+    /// </summary>
+    /// <param name="Money"></param>
+    /// <returns></returns>
     public bool withdrawal(int Money)
     {
-        if (Gamemoney > Money)
+        if (Gamemoney >= Money)
         {
             Gamemoney -= Money;
             MoneyText.text = $"$ {Gamemoney}";

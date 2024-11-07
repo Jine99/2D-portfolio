@@ -20,7 +20,7 @@ public class villain : MonoBehaviour
         if (theftVillain)
         {
             //TODO: 대응강화 넣어야함
-            VillainDelay = 1.5f;
+            VillainDelay = 1.5f*GameManager.Instance.player.VillaindEvict;
 
         }
     }
