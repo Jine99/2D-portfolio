@@ -98,8 +98,8 @@ public class VillainManager : MonoBehaviour
                 if (collider2d.CompareTag("Customer") || collider2d.CompareTag("Villain") ||
                     collider2d.CompareTag("Player")) { print("자리에 누군가있다."); return; }
             }
-            villainDelay2 = Random.Range(45f, 60f);
-            if (villainDelay2 < Delay1)
+            villainDelay2 = Random.Range(30f, 45f);
+            if (villainDelay2 < Delay2)
             {
                 villain vill = Instantiate(villain, position, Quaternion.identity);
                 vill.theftVillain = true;

@@ -41,7 +41,7 @@ public class Counter : Objects
         spawnmoney();
         RandomCustomer();
         foodRenderer();
-        VillainManager.Instance.villainSpawn(transform.position + Vector3.down);
+
     }
     private void foodRenderer()
     {
@@ -182,6 +182,7 @@ public class Counter : Objects
     {
         if (Customerbool && ObjectSituation)
         {
+            VillainManager.Instance.villainSpawn(transform.position + Vector3.down);
             CustomersDelay += Time.deltaTime;
             if (CustomersDelay < CustomerspawnDelay) return;
             float Ran = Random.Range(1, 100f);
